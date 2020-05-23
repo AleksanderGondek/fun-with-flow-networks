@@ -5,27 +5,21 @@
 
 #include "graph.hpp"
 
+
 namespace Killdozer {
 
 	DAG::DAG(std::vector<Edge> const &edges) {
 		for (auto &edge: edges) {
-			std::string from = edge.from;
-			std::string to = edge.to;
-			int maxFlow = edge.maxFlow;
-
-			adjacenceMap[from].push_back(make_pair(to, maxFlow));
+			adjacenceMap[edge.from].push_back(edge);
 		}
 	}
 
 	void displayGraph(DAG const &dag) {
 		for (const auto& m : dag.adjacenceMap) {
-			for (Link l: m.second) {
+			for (Edge e: m.second) {
 				std::cout << "(";
-				std::cout << m.first;
-				std::cout << ", ";
-				std::cout << l.first;
-				std::cout << ", ";
-				std::cout << l.second;
+				std::cout << e.from << " -> " << e.to << ", ";
+				std::cout << e.maxFlow;
 				std::cout << ")";
 				std::cout << std::endl;
 			}

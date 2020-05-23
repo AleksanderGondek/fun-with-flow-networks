@@ -8,7 +8,7 @@ int main() {
     std::cout << "Hello World!" << std::endl;
 
     std::vector<Killdozer::Edge> edges = {
-        { "A", "B", 1}
+        { "A", "B", 0, 1}
     };
     
     Killdozer::DAG dag(edges);

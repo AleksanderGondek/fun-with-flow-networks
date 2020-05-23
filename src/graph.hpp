@@ -6,17 +6,16 @@
 #include <unordered_map>
 #include <vector>
 
+
 namespace Killdozer {
 	struct Edge {
 		std::string from, to; 
-		int maxFlow;
+		int currentFlow, maxFlow;
 	};
-
-	typedef std::pair<std::string, int> Link;
 
 	class DAG {
 		public:
-			std::unordered_map<std::string, std::vector<Link>> adjacenceMap;  
+			std::unordered_map<std::string, std::vector<Edge>> adjacenceMap;  
 			DAG(std::vector<Edge> const &edges);
 	};
 
