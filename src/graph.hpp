@@ -9,7 +9,7 @@
 namespace Killdozer {
 	struct Edge {
 		std::string from, to; 
-		int weight;
+		int maxFlow;
 	};
 
 	typedef std::pair<std::string, int> Link;

@@ -11,9 +11,9 @@ namespace Killdozer {
 		for (auto &edge: edges) {
 			std::string from = edge.from;
 			std::string to = edge.to;
-			int weight = edge.weight;
+			int maxFlow = edge.maxFlow;
 
-			adjacenceMap[from].push_back(make_pair(to, weight));
+			adjacenceMap[from].push_back(make_pair(to, maxFlow));
 		}
 	}
 
