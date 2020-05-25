@@ -10,10 +10,17 @@
 
 
 namespace Killdozer {
+
+  // Why not std::vector<>* ?
+  // In > C++11, std::vector has move-semantics, 
+  // which means the local vector declared in function
+  // will be moved on return and, in some cases, even 
+  // the move can be elided by the compiler.
+
   std::vector<std::string> backtrace(
-    std::unordered_map<std::string, std::string> const parents,
-    std::string const source,
-    std::string const terminate
+    std::unordered_map<std::string, std::string> const &parents,
+    std::string const &source,
+    std::string const &terminate
   ) {
     std::vector<std::string> pathTaken = { terminate };
     while( pathTaken.back() != source ) {
@@ -25,8 +32,8 @@ namespace Killdozer {
 
   std::vector<std::string> bfs(
     Killdozer::DAG const &dag,
-    std::string const source,
-    std::string const terminate
+    std::string const &source,
+    std::string const &terminate
   ) {
     // Remember parents (and thus, visited vertices)
     std::unordered_map<std::string, std::string> parents;
@@ -58,6 +65,29 @@ namespace Killdozer {
     };
   }
 
+  int calculateFlow(
+    Killdozer::DAG const &dag,
+    std::vector<std::string> const &path
+  ) {
+    // Subsitute for Infinity in INT type
+    int minFlow = std::numeric_limits<int>::max();
+
+    // Can be improved    
+    for(std::vector<std::string>::size_type i = 0; i < path.size() - 1; i++) {
+      std::string from = path[i];
+      std::string to = path[i + 1];
+
+      for (Edge e: dag.adjacenceMap.at(from)) {
+        if(e.to != to) {
+          continue;
+        }
+        minFlow = std::min(minFlow, e.maxFlow - e.currentFlow);
+      }
+    }
+
+    return minFlow;
+  }
+
   int edmondsKarp(
     Killdozer::DAG &dag,
     std::string source,
@@ -65,8 +95,8 @@ namespace Killdozer {
   ) {
     int flow = 0;
 
-    std::vector<std::string> route;
-    route = bfs(dag, source, terminate);
+    std::vector<std::string> route = bfs(dag, source, terminate);
+    flow = calculateFlow(dag, route);
 
     return flow;
   }

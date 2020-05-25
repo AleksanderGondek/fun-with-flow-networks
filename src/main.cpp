@@ -24,7 +24,9 @@ int main() {
     
     Killdozer::DAG dag(edges);
     Killdozer::displayGraph(dag);
+    
     int result = edmondsKarp(dag, "A", "G");
+    std::cout << result << std::endl;
 
     return 0;
 }
