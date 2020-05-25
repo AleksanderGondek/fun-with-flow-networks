@@ -23,7 +23,7 @@ pkgs.stdenv.mkDerivation {
       -Wall \
       -Wextra \
       -Wpedantic \
-      -std=c++14 \
+      -std=c++2a \
       -o killdozer \
       ''${ALL_SOURCES}
 
@@ -33,7 +33,7 @@ pkgs.stdenv.mkDerivation {
 
     g++ \
       -w \
-      -std=c++14 \
+      -std=c++2a \
       -o test \
       ''${NO_MAIN_SOURCES} \
       ''${TESTS_FILES} \

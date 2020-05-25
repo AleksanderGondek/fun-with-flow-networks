@@ -12,7 +12,7 @@ int main() {
     };
     
     Killdozer::DAG dag(edges);
-    Killdozer::displayGraph(dag);    
+    Killdozer::displayGraph(dag);
 
     return 0;
 }

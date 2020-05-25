@@ -15,6 +15,8 @@ namespace Killdozer {
 
 	class DAG {
 		public:
+			// Access times will be linear only with collisions, which there will be none
+			// https://stackoverflow.com/questions/15470948/c-unordered-map-complexity
 			std::unordered_map<std::string, std::vector<Edge>> adjacenceMap;  
 			DAG(std::vector<Edge> const &edges);
 	};

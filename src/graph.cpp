@@ -19,7 +19,8 @@ namespace Killdozer {
 			for (Edge e: m.second) {
 				std::cout << "(";
 				std::cout << e.from << " -> " << e.to << ", ";
-				std::cout << e.maxFlow;
+				std::cout << "max: " << e.maxFlow << ", ";
+				std::cout << "current: " << e.maxFlow << ", ";
 				std::cout << ")";
 				std::cout << std::endl;
 			}
