@@ -5,17 +5,14 @@
 #include <algorithm>
 #include <limits>
 #include <queue>
-#include <stack>
 #include <string>
-#include <tuple>
-#include <unordered_set>
+#include <unordered_map>
+#include <vector>
 
 #include "graph.hpp"
 
 
 namespace Killdozer {
-
-  typedef std::tuple<int, std::stack<std::string>> bfsResponse;
 
   int edmondsKarp(
     Killdozer::DAG &dag,

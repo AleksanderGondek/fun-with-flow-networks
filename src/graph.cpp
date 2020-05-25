@@ -20,7 +20,7 @@ namespace Killdozer {
 				std::cout << "(";
 				std::cout << e.from << " -> " << e.to << ", ";
 				std::cout << "max: " << e.maxFlow << ", ";
-				std::cout << "current: " << e.maxFlow << ", ";
+				std::cout << "current: " << e.currentFlow << ", ";
 				std::cout << ")";
 				std::cout << std::endl;
 			}

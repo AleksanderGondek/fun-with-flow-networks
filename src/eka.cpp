@@ -1,57 +1,61 @@
 #include <algorithm>
 #include <limits>
 #include <queue>
-#include <stack>
 #include <string>
-#include <tuple>
-#include <unordered_set>
+#include <unordered_map>
+#include <vector>
 
 #include "graph.hpp"
 #include "eka.hpp"
 
 
 namespace Killdozer {
-  bfsResponse bfs(
-    Killdozer::DAG const &dag,
-    std::string source,
-    std::string terminate
+  std::vector<std::string> backtrace(
+    std::unordered_map<std::string, std::string> const parents,
+    std::string const source,
+    std::string const terminate
   ) {
-    // Subsitute for Infinity in INT type
-    int minFlow = std::numeric_limits<int>::max();
+    std::vector<std::string> pathTaken = { terminate };
+    while( pathTaken.back() != source ) {
+      pathTaken.push_back(parents.at(pathTaken.back()));
+    }
+    std::reverse(pathTaken.begin(), pathTaken.end());
+    return pathTaken;
+  }
 
-    // Remember visited vertices
-    std::unordered_set<std::string> visitedVertices;
-
-    std::queue<std::stack<std::string>> q;
+  std::vector<std::string> bfs(
+    Killdozer::DAG const &dag,
+    std::string const source,
+    std::string const terminate
+  ) {
+    // Remember parents (and thus, visited vertices)
+    std::unordered_map<std::string, std::string> parents;
+    std::queue<std::string> queue;
+    std::string currentNode;
     
-    std::stack<std::string> a;
-    a.push(source);
-    q.push(a);
+    queue.push(source);
+    while(!queue.empty()) {
+      currentNode = queue.front();
+      queue.pop();
 
-    while(!q.empty()){
-      std::stack<std::string> path = q.front();
-      q.pop();
-      
-      std::string node = path.top();
+      if (currentNode == terminate) {
+        return backtrace(
+          parents,
+          source,
+          terminate
+        );
+      }
 
-      if(node == terminate) {
-        return std::make_tuple(minFlow, path);
-      };
-
-      for (Edge e: dag.adjacenceMap.at(node)) {
-        // If max flow is already established or vertice was visited
-        if(e.maxFlow <= e.currentFlow || visitedVertices.contains(e.to)) {
+      for (Edge e: dag.adjacenceMap.at(currentNode)) {
+        // If already visited node or flow limit exceeded
+        if(parents.contains(e.to) || e.maxFlow <= e.currentFlow) {
           continue;
         };
-        visitedVertices.insert(e.to);
-        minFlow = std::min(minFlow, e.maxFlow - e.currentFlow);
 
-        std::stack<std::string> newPath = path;
-        path.push(e.to);
-        q.push(newPath);
+        parents[e.to] = currentNode;
+        queue.push(e.to);   
       };
-    }
-    // What if code will somehow get here?!
+    };
   }
 
   int edmondsKarp(
@@ -61,65 +65,8 @@ namespace Killdozer {
   ) {
     int flow = 0;
 
-    // While a route from source to sink exists
-    // and is valid
-    //   Add curr flow to edges making up the route
-    //   Increment flow by value which reached sink
-    //   repeat 
-    // If a route doesn't exist
-    //   return flow
-
-    std::string from;
-    std::string to;
-
-    int routeFlow = 0;
-    std::stack<std::string> route;
-    bfsResponse response;
-    
-    response = bfs(dag, source, terminate);
-    routeFlow = std::get<0>(response);
-    route = std::get<1>(response);
-    
-    flow = flow + routeFlow;
-
-    while(!route.empty()) {
-      // Ugly code - begin
-      // Take 2 items at once from stack
-      while(!route.empty()) {
-        if(!to.empty()) {
-          // to was not previously set
-          from = to;
-          to = route.top();
-          route.pop();
-        } else {
-          from = route.top();
-          route.pop();
-          to = route.top();
-          route.pop();
-        }
-
-        // It's rather not possible the map doesn't contain
-        // path already traveled
-        std::vector<Edge> connections = dag.adjacenceMap.at(from);
-        for(Edge e: connections) {
-          if(e.to != to) {
-            continue;
-          } else {
-            e.currentFlow = e.currentFlow + routeFlow;
-            break;
-          }          
-        }
-      }
-
-      response = bfs(dag, source, terminate);
-      routeFlow = std::get<0>(response);
-      route= std::get<1>(response);
-
-      flow = flow + routeFlow;
-
-      std::cout << "------" << std::endl << std::endl;
-      Killdozer::displayGraph(dag);
-    };
+    std::vector<std::string> route;
+    route = bfs(dag, source, terminate);
 
     return flow;
   }
