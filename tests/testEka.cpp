@@ -34,4 +34,25 @@ SCENARIO( " DAGs can have their maximum flow calculated", "[Edmonds–Karp Algor
       }
     }
   }
+
+  GIVEN ("DAG without connection to sink" ) {
+    std::vector<Killdozer::Edge> edges = {
+        { "A", "B", 0, 6},
+        { "A", "C", 0, 6},
+        { "D", "B", 0, 1},
+        { "D", "C", 0, 1},
+    };
+    
+    Killdozer::DAG dag(edges);
+
+    REQUIRE( dag.adjacenceMap.size() == 4 );
+
+    WHEN( "has maximum flow calculated" ) {
+      int result = edmondsKarp(dag, "A", "D");
+
+      THEN( "properly" ) {
+        REQUIRE( result == 0 );
+      }
+    }
+  }
 }
