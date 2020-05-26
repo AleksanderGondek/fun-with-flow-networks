@@ -9,22 +9,26 @@
 
 
 namespace killdozer {
-	struct Edge {
-		std::string from, to; 
-		int currentFlow, maxFlow;
-	};
+	namespace graph {
 
-	class DAG {
-		public:
-			// Access times will be linear only with collisions, which there will be none
-			// https://stackoverflow.com/questions/15470948/c-unordered-map-complexity
-			std::unordered_map<std::string, std::vector<Edge>> adjacenceMap;  
-			DAG(std::vector<Edge> const &edges);
-		private:
-			bool hasCycles(void);
-	};
+		struct Edge {
+			std::string from, to; 
+			int currentFlow, maxFlow;
+		};
 
-	void displayGraph(DAG const &dag);
+		class DAG {
+			public:
+				// Access times will be linear only with collisions, which there will be none
+				// https://stackoverflow.com/questions/15470948/c-unordered-map-complexity
+				std::unordered_map<std::string, std::vector<Edge>> adjacenceMap;  
+				DAG(std::vector<Edge> const &edges);
+			private:
+				bool hasCycles(void);
+		};
+
+		void displayGraph(DAG const &dag);
+
+	}
 }
 
 #endif

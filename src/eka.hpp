@@ -13,36 +13,38 @@
 
 
 namespace killdozer {
+  namespace eka {
 
-  std::vector<std::string> backtrace(
-    std::unordered_map<std::string, std::string> const &parents,
-    std::string const &source,
-    std::string const &terminate
-  );
+    std::vector<std::string> backtrace(
+      std::unordered_map<std::string, std::string> const &parents,
+      std::string const &source,
+      std::string const &terminate
+    );
 
-  std::vector<std::string> bfs(
-    killdozer::DAG const &dag,
-    std::string const &source,
-    std::string const &terminate
-  );
+    std::vector<std::string> bfs(
+      killdozer::graph::DAG const &dag,
+      std::string const &source,
+      std::string const &terminate
+    );
 
-  int calculateFlow(
-    killdozer::DAG const &dag,
-    std::vector<std::string> const &path
-  );
+    int calculateFlow(
+      killdozer::graph::DAG const &dag,
+      std::vector<std::string> const &path
+    );
 
-  void updateCurrentFlow(
-    killdozer::DAG &dag,
-    int const &currentFlow,
-    std::vector<std::string> const &path
-  );
+    void updateCurrentFlow(
+      killdozer::graph::DAG &dag,
+      int const &currentFlow,
+      std::vector<std::string> const &path
+    );
 
+    int edmondsKarp(
+      killdozer::graph::DAG &dag,
+      std::string source,
+      std::string terminate
+    );
 
-  int edmondsKarp(
-    killdozer::DAG &dag,
-    std::string source,
-    std::string terminate
-  );
+  }
 }
 
 #endif

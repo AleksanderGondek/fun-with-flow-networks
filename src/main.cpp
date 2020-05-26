@@ -6,9 +6,7 @@
 
 
 int main() {
-    std::cout << "Hello World!" << std::endl;
-
-    std::vector<killdozer::Edge> edges = {
+    std::vector<killdozer::graph::Edge> edges = {
         { "A", "B", 0, 3},
         { "A", "C", 0, 3},
         { "A", "D", 0, 3},
@@ -22,8 +20,8 @@ int main() {
         { "F", "G", 0, 9}
     };
     
-    killdozer::DAG dag(edges);   
-    int result = edmondsKarp(dag, "A", "G");
+    killdozer::graph::DAG dag(edges);   
+    int result = killdozer::eka::edmondsKarp(dag, "A", "G");
     std::cout << result << std::endl;
 
     return 0;

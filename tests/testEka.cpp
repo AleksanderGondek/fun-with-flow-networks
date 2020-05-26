@@ -8,7 +8,7 @@
 SCENARIO( " DAGs can have their maximum flow calculated", "[Edmonds–Karp Algorithm]" ) {
 
   GIVEN( "Wikipedia-based example dag" ) {
-    std::vector<killdozer::Edge> edges = {
+    std::vector<killdozer::graph::Edge> edges = {
         { "A", "B", 0, 3},
         { "A", "C", 0, 3},
         { "A", "D", 0, 3},
@@ -22,12 +22,12 @@ SCENARIO( " DAGs can have their maximum flow calculated", "[Edmonds–Karp Algor
         { "F", "G", 0, 9}
     };
     
-    killdozer::DAG dag(edges);
+    killdozer::graph::DAG dag(edges);
 
     REQUIRE( dag.adjacenceMap.size() == 7 );
 
     WHEN( "has maximum flow calculated" ) {
-      int result = edmondsKarp(dag, "A", "G");
+      int result = killdozer::eka::edmondsKarp(dag, "A", "G");
 
       THEN( "properly" ) {
         REQUIRE( result == 5 );
@@ -36,19 +36,19 @@ SCENARIO( " DAGs can have their maximum flow calculated", "[Edmonds–Karp Algor
   }
 
   GIVEN ("DAG without connection to sink" ) {
-    std::vector<killdozer::Edge> edges = {
+    std::vector<killdozer::graph::Edge> edges = {
         { "A", "B", 0, 6},
         { "A", "C", 0, 6},
         { "D", "B", 0, 1},
         { "D", "C", 0, 1},
     };
     
-    killdozer::DAG dag(edges);
+    killdozer::graph::DAG dag(edges);
 
     REQUIRE( dag.adjacenceMap.size() == 4 );
 
     WHEN( "has maximum flow calculated" ) {
-      int result = edmondsKarp(dag, "A", "D");
+      int result = killdozer::eka::edmondsKarp(dag, "A", "D");
 
       THEN( "properly" ) {
         REQUIRE( result == 0 );
