@@ -9,7 +9,7 @@
 #include "eka.hpp"
 
 
-namespace Killdozer {
+namespace killdozer {
 
   // Why not std::vector<>* ?
   // In > C++11, std::vector has move-semantics, 
@@ -31,7 +31,7 @@ namespace Killdozer {
   }
 
   std::vector<std::string> bfs(
-    Killdozer::DAG const &dag,
+    killdozer::DAG const &dag,
     std::string const &source,
     std::string const &terminate
   ) {
@@ -53,7 +53,7 @@ namespace Killdozer {
         );
       }
 
-      for (Killdozer::Edge e: dag.adjacenceMap.at(currentNode)) {
+      for (killdozer::Edge e: dag.adjacenceMap.at(currentNode)) {
         // Does queue already contains currentNode?
         bool visited = false;
         for (std::string n: queue) {
@@ -74,7 +74,7 @@ namespace Killdozer {
   }
 
   int calculateFlow(
-    Killdozer::DAG const &dag,
+    killdozer::DAG const &dag,
     std::vector<std::string> const &path
   ) {
     // Subsitute for Infinity in INT type
@@ -84,7 +84,7 @@ namespace Killdozer {
       std::string from = path[i];
       std::string to = path[i + 1];
 
-      for (Killdozer::Edge const &e: dag.adjacenceMap.at(from)) {
+      for (killdozer::Edge const &e: dag.adjacenceMap.at(from)) {
         if(e.to != to) {
           continue;
         }
@@ -96,7 +96,7 @@ namespace Killdozer {
   }
 
   void updateCurrentFlow(
-    Killdozer::DAG &dag,
+    killdozer::DAG &dag,
     int const &currentFlow,
     std::vector<std::string> const &path
   ) {
@@ -104,7 +104,7 @@ namespace Killdozer {
       std::string from = path[i];
       std::string to = path[i + 1];
 
-      for (Killdozer::Edge &e: dag.adjacenceMap.at(from)) {
+      for (killdozer::Edge &e: dag.adjacenceMap.at(from)) {
         if(e.to != to) {
           continue;
         }
@@ -114,7 +114,7 @@ namespace Killdozer {
   }
 
   int edmondsKarp(
-    Killdozer::DAG &dag,
+    killdozer::DAG &dag,
     std::string source,
     std::string terminate
   ) {

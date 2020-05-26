@@ -7,7 +7,7 @@
 #include "graph.hpp"
 
 
-namespace Killdozer {
+namespace killdozer {
 
 	DAG::DAG(std::vector<Edge> const &edges) {
 		for (Edge const &edge: edges) {

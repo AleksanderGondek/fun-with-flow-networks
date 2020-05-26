@@ -8,7 +8,7 @@
 #include <vector>
 
 
-namespace Killdozer {
+namespace killdozer {
 	struct Edge {
 		std::string from, to; 
 		int currentFlow, maxFlow;
