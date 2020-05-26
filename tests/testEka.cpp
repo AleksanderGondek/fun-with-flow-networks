@@ -5,34 +5,31 @@
 #include "../src/graph.hpp"
 #include "../src/eka.hpp"
 
-SCENARIO( " graphs can have their maximum flow calculated", "[Edmonds–Karp Algorithm]" ) {
+SCENARIO( " DAGs can have their maximum flow calculated", "[Edmonds–Karp Algorithm]" ) {
 
-  GIVEN( "A simple graph from wikipedia" ) {
+  GIVEN( "Wikipedia-based example dag" ) {
     std::vector<Killdozer::Edge> edges = {
         { "A", "B", 0, 3},
+        { "A", "C", 0, 3},
         { "A", "D", 0, 3},
         { "B", "C", 0, 4},
-        { "C", "A", 0, 3},
+        { "B", "E", 0, 1},
         { "C", "D", 0, 1},
         { "C", "E", 0, 2},
         { "D", "F", 0, 6},
         { "D", "E", 0, 2},
-        { "E", "B", 0, 1},
         { "E", "G", 0, 1},
         { "F", "G", 0, 9}
     };
     
-    // This graph is not Acyclic, but should do well as example
-    Killdozer::DAG g(edges);
+    Killdozer::DAG dag(edges);
 
-    REQUIRE( g.adjacenceMap.size() == 6 );
+    REQUIRE( dag.adjacenceMap.size() == 7 );
 
+    WHEN( "has maximum flow calculated" ) {
+      int result = edmondsKarp(dag, "A", "G");
 
-    WHEN( "maximum flow is calculated" ) {
-      //int result = edmondsKarp(g, "A", "F");
-      int result = 5;
-
-      THEN( "result is accurate" ) {
+      THEN( "properly" ) {
         REQUIRE( result == 5 );
       }
     }
