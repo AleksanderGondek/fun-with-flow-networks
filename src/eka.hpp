@@ -31,14 +31,15 @@ namespace killdozer {
       std::vector<std::string> const &path
     );
 
-    void updateCurrentFlow(
+    void updateeka_currentFlow(
       killdozer::graph::DAG &dag,
-      int const &currentFlow,
+      int const &eka_currentFlow,
       std::vector<std::string> const &path
     );
 
     // https://en.wikipedia.org/wiki/Edmonds–Karp_algorithm
     // Find maximum flow in a flow network in O(VE^2) time
+    // Note: current implementation ignores minFlow param
     int edmondsKarp(
       killdozer::graph::DAG &dag,
       std::string source,

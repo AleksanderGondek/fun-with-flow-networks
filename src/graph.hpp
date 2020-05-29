@@ -12,8 +12,9 @@ namespace killdozer {
 	namespace graph {
 
 		struct Edge {
-			std::string from, to; 
-			int currentFlow, maxFlow;
+			std::string from, to;
+			int maxFlow, minFlow, cost;
+			int eka_currentFlow;
 		};
 
 		class DAG {

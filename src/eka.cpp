@@ -62,7 +62,7 @@ namespace killdozer {
               visited = true;
             }
           }
-          if(visited || e.maxFlow <= e.currentFlow) {
+          if(visited || e.maxFlow <= e.eka_currentFlow) {
             continue;
           };
 
@@ -89,14 +89,14 @@ namespace killdozer {
           if(e.to != to) {
             continue;
           }
-          minFlow = std::min(minFlow, e.maxFlow - e.currentFlow);
+          minFlow = std::min(minFlow, e.maxFlow - e.eka_currentFlow);
         }
       }
 
       return minFlow;
     }
 
-    void updateCurrentFlow(
+    void update_eka_currentFlow(
       killdozer::graph::DAG &dag,
       int const &currentFlow,
       std::vector<std::string> const &path
@@ -109,7 +109,7 @@ namespace killdozer {
           if(e.to != to) {
             continue;
           }
-          e.currentFlow = e.currentFlow + currentFlow;
+          e.eka_currentFlow = e.eka_currentFlow + currentFlow;
         }
       }
     }
@@ -125,7 +125,7 @@ namespace killdozer {
       while(!route.empty()) {
         int routeFlow = calculateFlow(dag, route);
         flow = flow + routeFlow;
-        updateCurrentFlow(dag, routeFlow, route);
+        update_eka_currentFlow(dag, routeFlow, route);
         route = bfs(dag, source, terminate);
       }
 

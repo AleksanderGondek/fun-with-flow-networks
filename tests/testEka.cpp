@@ -9,17 +9,17 @@ SCENARIO( " DAGs can have their maximum flow calculated", "[Edmonds–Karp Algor
 
   GIVEN( "Wikipedia-based example dag" ) {
     std::vector<killdozer::graph::Edge> edges = {
-        { "A", "B", 0, 3},
-        { "A", "C", 0, 3},
-        { "A", "D", 0, 3},
-        { "B", "C", 0, 4},
-        { "B", "E", 0, 1},
-        { "C", "D", 0, 1},
-        { "C", "E", 0, 2},
-        { "D", "F", 0, 6},
-        { "D", "E", 0, 2},
-        { "E", "G", 0, 1},
-        { "F", "G", 0, 9}
+        { "A", "B", 3, 0, 0, 0},
+        { "A", "C", 3, 0, 0, 0},
+        { "A", "D", 3, 0, 0, 0},
+        { "B", "C", 4, 0, 0, 0},
+        { "B", "E", 1, 0, 0, 0},
+        { "C", "D", 1, 0, 0, 0},
+        { "C", "E", 2, 0, 0, 0},
+        { "D", "F", 6, 0, 0, 0},
+        { "D", "E", 2, 0, 0, 0},
+        { "E", "G", 1, 0, 0, 0},
+        { "F", "G", 9, 0, 0, 0}
     };
     
     killdozer::graph::DAG dag(edges);
@@ -37,10 +37,10 @@ SCENARIO( " DAGs can have their maximum flow calculated", "[Edmonds–Karp Algor
 
   GIVEN ("DAG without connection to sink" ) {
     std::vector<killdozer::graph::Edge> edges = {
-        { "A", "B", 0, 6},
-        { "A", "C", 0, 6},
-        { "D", "B", 0, 1},
-        { "D", "C", 0, 1},
+        { "A", "B", 6, 0, 0, 0},
+        { "A", "C", 6, 0, 0, 0},
+        { "D", "B", 1, 0, 0, 0},
+        { "D", "C", 1, 0, 0, 0}
     };
     
     killdozer::graph::DAG dag(edges);

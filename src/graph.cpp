@@ -34,8 +34,10 @@ namespace killdozer {
 				for (Edge e: m.second) {
 					std::cout << "(";
 					std::cout << e.from << " -> " << e.to << ", ";
+					std::cout << "min: " << e.minFlow << ", ";
 					std::cout << "max: " << e.maxFlow << ", ";
-					std::cout << "current: " << e.currentFlow << ", ";
+					std::cout << "cost: " << e.cost  << ", ";
+					std::cout << "eka_currentFlow: " << e.eka_currentFlow << ", ";
 					std::cout << ")";
 					std::cout << std::endl;
 				}

@@ -134,7 +134,6 @@ namespace killdozer {
       std::vector<TaskGroup> const &task_groups,
       std::vector<Task> const &tasks
       ) {
-        return 0;
     }
 
 	}
