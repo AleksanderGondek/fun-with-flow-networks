@@ -1,4 +1,3 @@
-
 #ifndef FFA_HPP
 #define FFA_HPP
 
@@ -38,6 +37,8 @@ namespace killdozer {
       std::vector<std::string> const &path
     );
 
+    // https://en.wikipedia.org/wiki/Edmonds–Karp_algorithm
+    // Find maximum flow in a flow network in O(VE^2) time
     int edmondsKarp(
       killdozer::graph::DAG &dag,
       std::string source,
