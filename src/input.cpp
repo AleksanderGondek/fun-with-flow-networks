@@ -10,7 +10,125 @@
 namespace killdozer {
 	namespace input {
 
-    void parseFromStdin(killdozer::graph::DAG &dag) {
+    int departmentMaxWorkingHours(
+      std::string const &department_name,
+      std::vector<Researcher> const &researchers
+    ) {
+      std::string dep_name;
+      int total_working_hours = 0;
+      int working_hours_max = 0;
+      for(Researcher const &r: researchers) {
+        dep_name = std::get<1>(r);
+        working_hours_max = std::get<3>(r);
+        if(dep_name != department_name) {
+          continue;
+        }
+        total_working_hours = total_working_hours + working_hours_max;
+      }
+      return total_working_hours;
+    }
+
+    int taskGroupMaxWorkingHours(
+      std::string const &tg_name,
+      std::vector<Task> const &tasks
+    ) {
+      std::string t_tg_name;
+      int total_working_hours = 0;
+      int working_hours_max = 0;
+      for(Task const &t: tasks) {
+        t_tg_name = std::get<1>(t);
+        working_hours_max = std::get<5>(t);
+        if(t_tg_name != tg_name) {
+          continue;
+        }
+        total_working_hours = total_working_hours + working_hours_max;
+      }
+      return total_working_hours;
+    }
+
+    void createSchedulingGraph(
+      killdozer::graph::DAG &dag,
+      std::string const &start_label,
+      std::string const &termination_label,
+      std::vector<Department> const &departments,
+      std::vector<Researcher> const &researchers,
+      std::vector<TaskGroup> const &task_groups,
+      std::vector<Task> const &tasks
+      ) {
+        // Add starting node
+        dag.adjacenceMap[start_label] = std::vector<killdozer::graph::Edge>();
+
+        // Add departments node
+        for(Department const &dep: departments) {
+          std::string dep_name = std::get<0>(dep);
+          int max_dep_working_hours = departmentMaxWorkingHours(dep_name, researchers);
+
+          dag.adjacenceMap[dep_name] = std::vector<killdozer::graph::Edge>();
+          dag.adjacenceMap[start_label].push_back({
+            // From, to, maxFlow, MinFlow, cost, currentFlow
+            start_label, dep_name, max_dep_working_hours, 0, 0, 0
+          });
+        };
+
+        // Add researchers
+        for(Researcher const &r: researchers) {
+          std::string r_name = std::get<0>(r);
+          std::string r_dep_name = std::get<1>(r);
+          int r_importance = std::get<2>(r);
+          int r_max_working_hours = std::get<3>(r);
+
+          dag.adjacenceMap[r_name] = std::vector<killdozer::graph::Edge>();
+          dag.adjacenceMap[r_dep_name].push_back({
+            // From, to, maxFlow, MinFlow, cost, currentFlow
+            r_dep_name, r_name, r_max_working_hours, 0, r_importance, 0
+          });
+        };
+
+        // Add termination node
+        dag.adjacenceMap[termination_label] = std::vector<killdozer::graph::Edge>();
+
+        // Add task groups
+        for(TaskGroup const &tg: task_groups) {
+          std::string tg_name = std::get<0>(tg);
+          int tg_required_working_hours = std::get<2>(tg);
+          int tg_max_possible_working_hours = taskGroupMaxWorkingHours(
+            tg_name,
+            tasks
+          );
+
+          dag.adjacenceMap[tg_name] = std::vector<killdozer::graph::Edge>();
+          dag.adjacenceMap[tg_name].push_back({
+            // From, to, maxFlow, MinFlow, cost, currentFlow
+            tg_name, termination_label, tg_max_possible_working_hours, tg_required_working_hours, 0, 0
+          });
+        };
+
+        // Add tasks
+        for(Task const &t: tasks) {
+          std::string t_name = std::get<0>(t);
+          std::string t_tg_name = std::get<1>(t);
+          int t_min = std::get<4>(t);
+          int t_max = std::get<5>(t);
+
+          dag.adjacenceMap[t_name] = std::vector<killdozer::graph::Edge>();
+          dag.adjacenceMap[t_name].push_back({
+            // From, to, maxFlow, MinFlow, cost, currentFlow
+            t_name, t_tg_name, t_max, t_min, 0, 0
+          });
+        };
+
+      // TODO: Connection between researchesr and taks..
+
+      // 1 - Research to separate researcher day
+      // 2 - day into possilbe tasks
+      // (special case - time conflict)
+    }
+
+    void parseFromStdin(
+      killdozer::graph::DAG &dag,
+      std::string const &start_label,
+      std::string const &termination_label
+    ) {
       std::vector<Department> departments;
       std::vector<Researcher> researchers;
       std::vector<TaskGroup> task_groups;
@@ -56,7 +174,8 @@ namespace killdozer {
 
           researchers.push_back(
             std::make_tuple(
-              r_part0,
+              // Guarantee researcher names are unique
+              department_name + "|" + r_part0,
               department_name,
               importance,
               max_working_hours_total,
@@ -96,20 +215,21 @@ namespace killdozer {
           std::getline(std::cin, input_line);
           std::istringstream t_stream(input_line);
           
-          std::string t_part0, t_part1, t_part2, t_part3, t_part4;
+          std::string t_part0, t_part1, t_part2, t_part3;
         
-          t_stream >> t_part0 >> t_part1 >> t_part2 >> t_part3 >> t_part4;
+          t_stream >> t_part0 >> t_part1 >> t_part2 >> t_part3;
 
-          int day = std::stoi(t_part1);
-          int time = std::stoi(t_part2);
-          int working_hours_min = std::stoi(t_part3);
-          int working_hours_max = std::stoi(t_part4);
+          int day = std::stoi(t_part0);
+          int time = std::stoi(t_part1);
+          int working_hours_min = std::stoi(t_part2);
+          int working_hours_max = std::stoi(t_part3);
 
           tasks.push_back(
             std::make_tuple(
-              t_part0,
+              // groupname|day|time
+              task_group_name + "|" + t_part0 + "|" + t_part1,
               task_group_name,
-              day,
+              day, 
               time,
               working_hours_min,
               working_hours_max
@@ -120,20 +240,13 @@ namespace killdozer {
 
       createSchedulingGraph(
         dag,
+        start_label,
+        termination_label,
         departments,
         researchers,
         task_groups,
         tasks
       );
-    }
-
-    void createSchedulingGraph(
-      killdozer::graph::DAG &dag,
-      std::vector<Department> const &departments,
-      std::vector<Researcher> const &researchers,
-      std::vector<TaskGroup> const &task_groups,
-      std::vector<Task> const &tasks
-      ) {
     }
 
 	}
