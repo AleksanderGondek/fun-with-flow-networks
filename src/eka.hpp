@@ -14,6 +14,16 @@
 namespace killdozer {
   namespace eka {
 
+    void transposeMinFlowsVertices(
+      killdozer::graph::DAG &dag
+    );
+
+    // Why not std::vector<>* ?
+    // In > C++11, std::vector has move-semantics, 
+    // which means the local vector declared in function
+    // will be moved on return and, in some cases, even 
+    // the move can be elided by the compiler.
+
     std::vector<std::string> backtrace(
       std::unordered_map<std::string, std::string> const &parents,
       std::string const &source,
@@ -31,7 +41,7 @@ namespace killdozer {
       std::vector<std::string> const &path
     );
 
-    void updateeka_currentFlow(
+    void update_eka_currentFlow(
       killdozer::graph::DAG &dag,
       int const &eka_currentFlow,
       std::vector<std::string> const &path
@@ -39,7 +49,14 @@ namespace killdozer {
 
     // https://en.wikipedia.org/wiki/Edmonds–Karp_algorithm
     // Find maximum flow in a flow network in O(VE^2) time
-    // Note: current implementation ignores minFlow param
+    //
+    // Important!!
+    // TODO: If dag contains edges with minimal flow specified
+    // one needs to transpose it, into something that Edmond's Karp
+    // algorithm can work with.
+    // 
+    // In short, we need to map single min_flow vertex into two. 
+    // See: https://stackoverflow.com/questions/8751327/edmonds-karp-algorithm-for-a-graph-which-has-nodes-with-flow-capacities
     int edmondsKarp(
       killdozer::graph::DAG &dag,
       std::string source,

@@ -12,11 +12,10 @@
 namespace killdozer {
   namespace eka {
 
-    // Why not std::vector<>* ?
-    // In > C++11, std::vector has move-semantics, 
-    // which means the local vector declared in function
-    // will be moved on return and, in some cases, even 
-    // the move can be elided by the compiler.
+    void transposeMinFlowsVertices(
+      killdozer::graph::DAG &dag
+    ) {
+    }
 
     std::vector<std::string> backtrace(
       std::unordered_map<std::string, std::string> const &parents,
@@ -119,6 +118,8 @@ namespace killdozer {
       std::string source,
       std::string terminate
     ) {
+      transposeMinFlowsVertices(dag);
+
       int flow = 0;
 
       std::vector<std::string> route = bfs(dag, source, terminate);

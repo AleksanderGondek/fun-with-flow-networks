@@ -1,11 +1,14 @@
 #include <iostream>
 #include <vector>
 
+#include "input.hpp"
 #include "graph.hpp"
 #include "eka.hpp"
+#include "mmcca.hpp"
 
 
 int main() {
+    // Test flow of the application
     std::vector<killdozer::graph::Edge> edges = {
         { "A", "B", 3, 0, 0, 0},
         { "A", "C", 3, 0, 0, 0},
@@ -20,9 +23,26 @@ int main() {
         { "F", "G", 9, 0, 0, 0}
     };
     
-    killdozer::graph::DAG dag(edges);   
-    int result = killdozer::eka::edmondsKarp(dag, "A", "G");
-    std::cout << result << std::endl;
+    killdozer::graph::DAG test_dag(edges);   
+    int test_result = killdozer::eka::edmondsKarp(test_dag, "A", "G");
+    std::cout << "Max flow is: " << test_result << std::endl;
 
+
+    // Proper flow of the application
+    // aka. read-in in the data
+    // create graph and find min cost
+    edges = {};
+    killdozer::graph::DAG dag(edges);    
+    killdozer::input::parseFromStdin(
+        dag,
+        "S", // Name of starting node/vertex
+        "T" //  Name of termination node/vertex
+    );
+    int minCost = killdozer::mmcca::minimumMeanCycleCancelingAlgorithm(
+        dag,
+        "S",
+        "T"
+    );
+    std::cout << "Min cost is: " << minCost << std::endl;
     return 0;
 }

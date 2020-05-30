@@ -117,11 +117,20 @@ namespace killdozer {
           });
         };
 
-      // TODO: Connection between researchesr and taks..
+      
+      // TODO: Create connections between researchers and tasks
+      // 
+      // Pseudo-code
+      // 1. Create vertex for each research day of work possible
+      // 2. Create connection from each day of possible work to
+      //    tasks that one researcher can do
+      //    (Notice! As each tasks takes ony 1 hour, one cannot 
+      //     assign more time per person than 1!)
+      // 
+      // 2a. (Special case) If there are multiple tasks possible
+      //     to be performed at given time, create a 'conflict vertex'
+      //     with 0/1 edges connected to each possibility.
 
-      // 1 - Research to separate researcher day
-      // 2 - day into possilbe tasks
-      // (special case - time conflict)
     }
 
     void parseFromStdin(
